@@ -4,47 +4,55 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a Next.js 15.5.3 application using the App Router architecture with TypeScript, Tailwind CSS v4, and React 19. The project was bootstrapped with create-next-app and uses Turbopack for faster builds.
+"간단한 N빵" - A Korean bill splitting application built with Next.js 15.5.3, TypeScript, and Tailwind CSS v4. This is a 30-minute MVP for fair bill splitting with local storage persistence and KakaoTalk message generation.
 
 ## Development Commands
 
-- `npm run dev` - Start development server with Turbopack
-- `npm run build` - Build for production with Turbopack  
-- `npm run start` - Start production server
-- `npm run lint` - Run ESLint with Next.js TypeScript rules
+- `pnpm run dev` - Start development server with Turbopack
+- `pnpm run build` - Build for production with Turbopack  
+- `pnpm run start` - Start production server
+- `pnpm run lint` - Run ESLint with Next.js TypeScript rules
 
-## Architecture
+## Application Architecture
 
-**App Router Structure**: Uses Next.js App Router with files in `src/app/`
-- `src/app/layout.tsx` - Root layout with Geist fonts and global styles
-- `src/app/page.tsx` - Homepage component  
-- `src/app/globals.css` - Global styles with Tailwind v4 and CSS custom properties
+**Core Domain Logic**:
+- `src/hooks/useBillSplitter.ts` - Main business logic hook managing members, items, balances, and settlements
+- `src/types/index.ts` - Complete TypeScript definitions for all data structures
+- Uses greedy algorithm for optimal settlement calculations
+- All data persisted to localStorage with automatic save/load
 
-**TypeScript Configuration**: 
-- Path mapping configured (`@/*` → `./src/*`)
-- Strict mode enabled
-- Next.js TypeScript plugin integrated
+**Component Structure**:
+- `src/app/page.tsx` - Main application with two-column layout
+- `src/components/forms/` - Member and item input forms
+- `src/components/ui/` - Reusable UI components (chips, balance cards)
+- `src/components/settlement/` - Settlement calculation display and KakaoTalk message generation
 
-**Styling**:
-- Tailwind CSS v4 with PostCSS integration
-- CSS custom properties for theming (light/dark mode support)
-- Geist Sans and Geist Mono fonts from Google Fonts
+**Data Flow**:
+- Members added with unique names and color-coded chips
+- Bill items track payer and beneficiaries (split among selected members)
+- Real-time balance calculation showing paid/owed/net amounts
+- Automatic settlement optimization using greedy debt resolution
+- One-click KakaoTalk message copying for group sharing
 
-**ESLint Setup**: 
-- Next.js core web vitals and TypeScript rules
-- Flat config format with ignores for build directories
+## Key Features
 
-## Key Dependencies
+**Member Management**: Add/remove members with duplicate name prevention and visual color coding using predefined Tailwind colors
 
-- React 19.1.0 with React DOM
-- Next.js 15.5.3 with App Router  
-- TypeScript 5.x
-- Tailwind CSS v4 with PostCSS plugin
-- ESLint 9.x with Next.js config
+**Bill Splitting Logic**: 
+- Items split equally among selected beneficiaries
+- Real-time balance calculation (paid - owed = net balance)
+- Optimal settlement calculation minimizing number of transactions
 
-## Development Notes
+**Korean UX**: Korean language interface with Won currency formatting, KakaoTalk integration, and cultural considerations (3+ member recommendations)
 
-- Turbopack is enabled for both dev and build commands for faster compilation
-- The project uses the new Tailwind v4 syntax with `@import "tailwindcss"`
-- Font optimization is handled through `next/font/google` with Geist fonts
-- Dark mode support is implemented via CSS custom properties and `prefers-color-scheme`
+**Data Persistence**: Automatic localStorage saves with error handling and data recovery
+
+## Technical Implementation
+
+**State Management**: Single `useBillSplitter` hook using React state with useMemo for performance optimization of balance/settlement calculations
+
+**TypeScript**: Comprehensive type definitions with interfaces for Member, BillItem, MemberBalance, Settlement and all component props
+
+**Styling**: Tailwind CSS v4 with responsive grid layouts, color-coded member chips, and consistent card-based UI
+
+**Browser Compatibility**: Clipboard API with fallback for older browsers, localStorage with error handling
