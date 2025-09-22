@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { SettlementMessageProps } from '@/types';
-import { AnimatedCounter } from '../ui/AnimatedCounter';
 import { Confetti } from '../ui/Confetti';
 
 export function SettlementMessage({ settlements, totalAmount, memberCount }: SettlementMessageProps) {

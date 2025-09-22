@@ -22,7 +22,6 @@ export default function Home() {
     clearAll,
   } = useBillSplitter();
 
-  const formatAmount = (amount: number) => amount.toLocaleString('ko-KR');
 
   return (
     <div className="min-h-screen bg-gray-50">

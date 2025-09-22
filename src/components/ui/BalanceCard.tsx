@@ -5,9 +5,6 @@ import { BalanceCardProps } from '@/types';
 import { AnimatedCounter } from './AnimatedCounter';
 
 export function BalanceCard({ balance }: BalanceCardProps) {
-  const formatAmount = (amount: number) => {
-    return amount.toLocaleString('ko-KR');
-  };
 
   const netDisplay = () => {
     if (balance.net > 0) {
